@@ -7,7 +7,7 @@ import UserModel from '../models/User.js';
 import User from '../models/User.js';
 
 class AuthService {
-  async registration(username, password) {
+  async registration(firstName, surname, username, password) {
     const candidat = await UserModel.findOne({ username });
 
     if (candidat) {
@@ -22,7 +22,12 @@ class AuthService {
 
     const hashPassword = await bcrypt.hash(password, 3);
 
-    const user = new UserModel({ username, password: hashPassword });
+    const user = new UserModel({
+      firstName,
+      surname,
+      username,
+      password: hashPassword,
+    });
     await user.save();
 
     const { accesToken, refreshToken } = tokenService.generateTokens({
@@ -34,6 +39,8 @@ class AuthService {
       accesToken,
       refreshToken,
       userId: user._id,
+      firstName: user.firstName,
+      surname: user.surname,
       username: user.username,
     };
   }
@@ -43,14 +50,26 @@ class AuthService {
 
     if (!user) {
       throw ApiError.BadRequest(
-        `Пользователь ${username} - не зарегистрирован`
+        `Пользователь ${username} - не зарегистрирован`,
+        [
+          {
+            value: username,
+            msg: `Пользователь ${username} - не зарегистрирован`,
+            param: 'username',
+          },
+        ]
       );
     }
 
     const isTruePass = await bcrypt.compare(password, user.password);
 
     if (!isTruePass) {
-      throw ApiError.BadRequest('Пароль - неверный');
+      throw ApiError.BadRequest(`Пароль не верный`, [
+        {
+          msg: `Пароль - не верный`,
+          param: 'password',
+        },
+      ]);
     }
 
     const { accesToken, refreshToken } = tokenService.generateTokens({

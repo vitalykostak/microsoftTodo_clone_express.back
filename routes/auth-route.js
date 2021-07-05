@@ -24,9 +24,15 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
+ *               firstName:
+ *                 type: string
+ *                 example: John
+ *               surname:
+ *                 type: string
+ *                 example: Doe
  *               username:
  *                 type: string
- *                 example: Ivan
+ *                 example: Nickname_24
  *               password:
  *                type: string
  *                example: pass123456
@@ -41,9 +47,15 @@ const router = express.Router();
  *                 userId :
  *                  type: string
  *                  example: 60d5d9b9dfbd1d4fa09f3302
+ *                 firstName:
+ *                   type: string
+ *                   example: John
+ *                 surname:
+ *                   type: string
+ *                   example: Doe
  *                 username:
  *                   type: string
- *                   example: Ivan
+ *                   example: Nickname_24
  *                 accesToken:
  *                   type: string
  *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGQ1ZDliOWRmYmQxZDRmYTA5ZjMzMDIiLCJ1c2VybmFtZSI6IlZpdGFseSIsImlhdCI6MTYyNDYyNzY0MSwiZXhwIjoxNjI3MjE5NjQxfQ.2onAyH_lGtpLcyPMDDzV9_eCjNQJn0MOEnP0LBMgydk
@@ -75,6 +87,14 @@ const router = express.Router();
  */
 router.post(
   '/registration',
+  body('firstName')
+    .exists()
+    .isLength({ min: 2, max: 15 })
+    .withMessage('Имя - 2-15 символов'),
+  body('surname')
+    .exists()
+    .isLength({ min: 2, max: 15 })
+    .withMessage('Фамилия - 2-15 символов'),
   body('username')
     .exists()
     .isLength({ min: 4, max: 15 })
@@ -100,7 +120,7 @@ router.post(
  *             properties:
  *               username:
  *                 type: string
- *                 example: Ivan
+ *                 example: Nickname_24
  *               password:
  *                type: string
  *                example: pass123456

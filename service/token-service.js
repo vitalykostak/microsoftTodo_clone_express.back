@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import TokenModel from '../models/Token.js';
 
 import config from '../config.js';
-import Token from '../models/Token.js';
 
 class TokenService {
   generateTokens(payload) {
@@ -57,7 +56,6 @@ class TokenService {
 
   async getTokenFromDB_ByUserId(userId) {
     const result = await TokenModel.findOne({ user: userId });
-    console.log(result);
     return result ? result : null;
   }
 }

@@ -13,15 +13,19 @@ class AuthController {
       const validationErrors = validationResult(req);
 
       if (!validationErrors.isEmpty()) {
-        console.log(...validationErrors.array());
         return next(
           ApiError.BadRequest('Ошибка валидации', [...validationErrors.array()])
         );
       }
 
-      const { username, password } = req.body;
+      const { firstName, surname, username, password } = req.body;
 
-      const userData = await authService.registration(username, password);
+      const userData = await authService.registration(
+        firstName,
+        surname,
+        username,
+        password
+      );
 
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: config.JWT_REFRESH_TIME.ms,
@@ -30,6 +34,8 @@ class AuthController {
 
       return res.status(201).json({
         userId: userData.userId,
+        firstName: userData.firstName,
+        surname: userData.surname,
         username: userData.username,
         accesToken: userData.accesToken,
       });
