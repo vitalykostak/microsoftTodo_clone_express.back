@@ -74,20 +74,12 @@ class AuthController {
 
   async logout(req, res, next) {
     try {
-      const errors = validationResult(req);
-
-      if (!errors.isEmpty()) {
-        return next(
-          ApiError.BadRequest('Ошибка валидации', [...errors.array()])
-        );
-      }
-
-      const { userId } = req.body;
+      const { userId } = req.$requestor;
       const result = await authService.logout(userId);
 
       res.clearCookie('refreshToken');
 
-      res.status(204).end();
+      return res.status(204).end();
     } catch (e) {
       next(e);
     }
@@ -96,7 +88,6 @@ class AuthController {
   async refreshToken(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
-      console.log(refreshToken);
       const tokens = await authService.refreshToken(refreshToken);
       res.cookie('refreshToken', tokens.refreshToken, {
         maxAge: config.JWT_REFRESH_TIME.ms,

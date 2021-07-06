@@ -47,9 +47,9 @@ class TokenService {
 
   verifyAccesToken(accesToken) {
     try {
-      const result = jwt.verify(accesToken, config.JWT_REFRESH_SECRET);
+      const result = jwt.verify(accesToken, config.JWT_ACCES_SECRET);
       return result;
-    } catch {
+    } catch (e) {
       return null;
     }
   }

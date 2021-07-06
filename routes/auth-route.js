@@ -2,11 +2,18 @@ import express from 'express';
 import { body } from 'express-validator';
 
 import authController from '../controllers/auth-controller.js';
+import authorizationMiddleware from '../middlewares/authorization-middleware.js';
 
 const router = express.Router();
 
 /**
  * @swagger
+ * components:
+ *  securitySchemes:
+ *    bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
  * tags:
  *   name: Auth
  */
@@ -59,8 +66,8 @@ const router = express.Router();
  *                 accesToken:
  *                   type: string
  *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGQ1ZDliOWRmYmQxZDRmYTA5ZjMzMDIiLCJ1c2VybmFtZSI6IlZpdGFseSIsImlhdCI6MTYyNDYyNzY0MSwiZXhwIjoxNjI3MjE5NjQxfQ.2onAyH_lGtpLcyPMDDzV9_eCjNQJn0MOEnP0LBMgydk
- *       400:
- *         description: Validation error or username is already taken or invalid password
+ *       401:
+ *         description: Unathorized
  *         content:
  *           application/json:
  *             schema:
@@ -68,7 +75,7 @@ const router = express.Router();
  *               properties:
  *                 message :
  *                  type: string
- *                  example: Ошибка валидации
+ *                  example: Unathorized
  *                 errors:
  *                  type: array
  *                  items:
@@ -137,7 +144,7 @@ router.post(
  *                  example: 60d5d9b9dfbd1d4fa09f3302
  *                 username:
  *                   type: string
- *                   example: Ivan
+ *                   example: Nickname_24
  *                 accesToken:
  *                   type: string
  *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGQ1ZDliOWRmYmQxZDRmYTA5ZjMzMDIiLCJ1c2VybmFtZSI6IlZpdGFseSIsImlhdCI6MTYyNDYyNzY0MSwiZXhwIjoxNjI3MjE5NjQxfQ.2onAyH_lGtpLcyPMDDzV9_eCjNQJn0MOEnP0LBMgydk
@@ -183,18 +190,10 @@ router.post(
  * @swagger
  * /api/auth/logout:
  *   delete:
+ *     security:
+ *     - bearerAuth: []
  *     summarry: User was logged out
  *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               userId:
- *                type: string
- *                example: 60d5d9b9dfbd1d4fa09f3302
  *     responses:
  *       204:
  *         description: The user was logged out. RefreshToken was unset from cookie
@@ -225,14 +224,7 @@ router.post(
  *
  */
 
-router.delete(
-  '/logout',
-  body('userId')
-    .exists()
-    .isMongoId()
-    .withMessage('Не корректный ID пользователя'),
-  authController.logout
-);
+router.delete('/logout', authorizationMiddleware, authController.logout);
 
 /**
  * @swagger
