@@ -9,6 +9,7 @@ import config from './config.js';
 
 import authRouter from './routes/auth-route.js';
 import userRouter from './routes/user-route.js';
+import taskRouter from './routes/task-route.js';
 
 import errorMiddleware from './middlewares/error-middleware.js';
 
@@ -36,6 +37,7 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
+app.use('/api/task', taskRouter);
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(openapiSpecification));
 
