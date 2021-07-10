@@ -10,6 +10,13 @@ class TaskService {
     }
     return tasks;
   }
+
+  async createTask(userId, task) {
+    task.taskOwnerId = userId;
+    const newTask = new TaskModel(task);
+    await newTask.save();
+    return newTask;
+  }
 }
 
 export default new TaskService();

@@ -1,5 +1,4 @@
 import { validationResult } from 'express-validator';
-import jwt from 'jsonwebtoken';
 
 import config from '../config.js';
 
