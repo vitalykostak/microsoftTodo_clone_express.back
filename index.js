@@ -53,6 +53,7 @@ async function start() {
     await mongoose.connect(MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false,
     });
   } catch (e) {
     console.log(e);

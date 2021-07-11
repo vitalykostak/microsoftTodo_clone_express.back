@@ -8,14 +8,13 @@ class TaskController {
       const { userId } = req.$requestor;
 
       const tasks = await taskService.getTasksByUserId(userId);
-      console.log(tasks);
       res.json(tasks);
     } catch (e) {
       next(e);
     }
   }
 
-  async createTask(req, res, next) {
+  async create(req, res, next) {
     try {
       const validationErrors = validationResult(req);
       if (!validationErrors.isEmpty()) {
@@ -27,8 +26,27 @@ class TaskController {
       const { userId } = req.$requestor;
       const { task } = req.body;
 
-      const result = await taskService.createTask(userId, task);
+      const result = await taskService.create(userId, task);
       return res.status(201).json(result);
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
+  }
+
+  async update(req, res, next) {
+    try {
+      const validationErrors = validationResult(req);
+      if (!validationErrors.isEmpty()) {
+        return next(
+          ApiError.BadRequest('Ошибка валидации', [...validationErrors.array()])
+        );
+      }
+
+      const { updateData, taskId } = req.body;
+
+      const result = await taskService.update({ taskId, updateData });
+      return res.json(result);
     } catch (e) {
       console.log(e);
       next(e);

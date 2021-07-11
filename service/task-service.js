@@ -11,11 +11,35 @@ class TaskService {
     return tasks;
   }
 
-  async createTask(userId, task) {
+  async create(userId, task) {
     task.taskOwnerId = userId;
     const newTask = new TaskModel(task);
     await newTask.save();
     return newTask;
+  }
+
+  async update({ taskId, updateData }) {
+    updateData = this.normaliseUpdateData(updateData);
+    const updateResult = await TaskModel.findOneAndUpdate(
+      { _id: taskId },
+      updateData,
+      { new: true }
+    );
+    return updateResult;
+  }
+
+  normaliseUpdateData(updateData) {
+    for (let key in updateData) {
+      switch (key) {
+        case 'isDone': {
+          updateData[key]
+            ? (updateData.completionDate = Date.now())
+            : (updateData.completionDate = null);
+          break;
+        }
+      }
+    }
+    return updateData;
   }
 }
 
