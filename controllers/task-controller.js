@@ -52,6 +52,28 @@ class TaskController {
       next(e);
     }
   }
+
+  async delete(req, res, next) {
+    try {
+      const validationErrors = validationResult(req);
+      if (!validationErrors.isEmpty()) {
+        return next(
+          ApiError.BadRequest('Ошибка валидации', [...validationErrors.array()])
+        );
+      }
+
+      const { taskId } = req.body;
+
+      await taskService.delete(taskId);
+      return res.status(204).end();
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
+  }
+  catch(e) {
+    next(e);
+  }
 }
 
 export default new TaskController();

@@ -28,6 +28,14 @@ class TaskService {
     return updateResult;
   }
 
+  async delete(taskId) {
+    const result = await TaskModel.findByIdAndDelete(taskId);
+    if (!result) {
+      throw ApiError.NotFound('Задача с таким Id не найдена');
+    }
+    console.log(result);
+  }
+
   normaliseUpdateData(updateData) {
     for (let key in updateData) {
       switch (key) {
