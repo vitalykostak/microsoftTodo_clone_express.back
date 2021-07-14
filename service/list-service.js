@@ -10,6 +10,12 @@ class ListService {
     }
     return lists;
   }
+
+  async create(userId, label) {
+    const newList = new ListModel({ listOwnerId: userId, label });
+    await newList.save();
+    return newList;
+  }
 }
 
 export default new ListService();
