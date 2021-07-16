@@ -206,7 +206,7 @@ router.post(
  *                      type: string
  *                      example: 2021-07-06T08:37:42.597+00:00
  *       400:
- *         description: Update is not exists or not an object
+ *         description: UpdateData is not exists or not an object
  *         content:
  *           application/json:
  *             schema:

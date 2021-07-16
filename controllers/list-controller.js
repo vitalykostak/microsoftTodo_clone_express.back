@@ -24,8 +24,21 @@ class ListController {
       const { userId } = req.$requestor;
       const { label } = req.body;
       const newList = await listService.create(userId, label);
-      console.log(newList);
       return res.status(201).json(newList);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async update(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest('Ошибка валидации', errors.array()));
+      }
+      const { listId, updateData } = req.body;
+      const result = await listService.update({ listId, updateData });
+      return res.json(result);
     } catch (e) {
       next(e);
     }

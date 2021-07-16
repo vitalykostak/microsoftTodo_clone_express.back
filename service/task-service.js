@@ -33,7 +33,6 @@ class TaskService {
     if (!result) {
       throw ApiError.NotFound('Задача с таким Id не найдена');
     }
-    console.log(result);
   }
 
   normaliseUpdateData(updateData) {

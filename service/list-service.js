@@ -16,6 +16,16 @@ class ListService {
     await newList.save();
     return newList;
   }
+
+  async update({ listId, updateData }) {
+    const result = await ListModel.findOneAndUpdate(
+      { _id: listId },
+      updateData,
+      { new: true }
+    );
+
+    return result;
+  }
 }
 
 export default new ListService();
