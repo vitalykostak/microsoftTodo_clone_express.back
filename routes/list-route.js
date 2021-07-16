@@ -214,4 +214,62 @@ router.patch(
     .withMessage('Идентификатор списка не валиден'),
   listController.update
 );
+
+/**
+ * @swagger
+ * /api/list:
+ *   delete:
+ *     security:
+ *     - bearerAuth: []
+ *     summarry: Delete list and list's tasks
+ *     tags: [List]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               listId:
+ *                 type: string
+ *     responses:
+ *       204:
+ *         description: The list and its tasks have been deleted
+ *       400:
+ *         description: listId is not exists or not a mongoId
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message :
+ *                  type: string
+ *                  example: Ошибка валидации
+ *                 errors:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *       5xx:
+ *         description: Unexpected error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message :
+ *                  type: string
+ *                  example: Непредвиденная ошибка
+ *
+ */
+
+router.delete(
+  '',
+  authorizationMiddleware,
+  body('listId')
+    .exists()
+    .withMessage('Не передан идентификатор списка')
+    .isMongoId()
+    .withMessage('Идентификатор списка не валиден'),
+  listController.delete
+);
 export default router;

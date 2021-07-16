@@ -35,6 +35,11 @@ class TaskService {
     }
   }
 
+  async deleteByListId(listId) {
+    const result = await TaskModel.deleteMany({ externalList: listId });
+    console.log(result);
+  }
+
   normaliseUpdateData(updateData) {
     for (let key in updateData) {
       switch (key) {

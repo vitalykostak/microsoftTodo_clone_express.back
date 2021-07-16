@@ -26,6 +26,10 @@ class ListService {
 
     return result;
   }
+
+  async delete(listId) {
+    await ListModel.findByIdAndDelete(listId);
+  }
 }
 
 export default new ListService();
