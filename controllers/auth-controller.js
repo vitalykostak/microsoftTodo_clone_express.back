@@ -93,10 +93,11 @@ class AuthController {
         httpOnly: true,
       });
 
-      res.json({
+      return res.json({
         accesToken: tokens.accesToken,
       });
     } catch (e) {
+      res.clearCookie('refreshToken');
       next(e);
     }
   }
