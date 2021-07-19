@@ -7,7 +7,7 @@ const config = {
   JWT_ACCES_TIME: '30m',
   JWT_REFRESH_TIME: { str: '30d', ms: 30 * 24 * 60 * 60 * 1000 },
   CORS_OPTIONS: {
-    origin: 'https://todo-clone-app.herokuapp.com/',
+    origin: 'https://todo-clone-app.herokuapp.com',
     credentials: true,
   },
 };
