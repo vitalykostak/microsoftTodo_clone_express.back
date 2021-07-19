@@ -14,8 +14,8 @@ import listRouter from './routes/list-route.js';
 
 import errorMiddleware from './middlewares/error-middleware.js';
 
-const PORT = config.PORT;
-const MONGO_URI = config.MONGO_URI;
+const PORT = process.env.PORT || config.PORT;
+const MONGODB_URI = process.env.MONGODB_URI || config.MONGODB_URI;
 
 const swaggerOptions = {
   definition: {
@@ -50,7 +50,7 @@ async function start() {
     app.listen(PORT, () => {
       console.log(`Server was started on ${PORT}...`);
     });
-    await mongoose.connect(MONGO_URI, {
+    await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
