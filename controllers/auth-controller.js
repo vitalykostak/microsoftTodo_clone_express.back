@@ -29,7 +29,7 @@ class AuthController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: config.JWT_REFRESH_TIME.ms,
         httpOnly: true,
-        SameSite: 'none',
+        sameSite: 'none',
       });
 
       return res.status(201).json({
@@ -60,7 +60,7 @@ class AuthController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: config.JWT_REFRESH_TIME.ms,
         httpOnly: true,
-        SameSite: 'none',
+        sameSite: 'none',
       });
 
       return res.json({
@@ -93,7 +93,7 @@ class AuthController {
       res.cookie('refreshToken', tokens.refreshToken, {
         maxAge: config.JWT_REFRESH_TIME.ms,
         httpOnly: true,
-        SameSite: 'none',
+        sameSite: 'none',
       });
 
       return res.json({
